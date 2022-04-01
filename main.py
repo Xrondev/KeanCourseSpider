@@ -3,7 +3,7 @@ import time
 import cleaner
 from SavingThread import SavingThread
 
-THREAD_NUM = 10
+THREAD_NUM = 5
 thread_list = []
 
 
@@ -21,9 +21,9 @@ def run():
     return end - start
 
 
-print(run())
+# print(run())
 
-result = cleaner.cleaner(39)
-for page in result:
-    for course in page:
-        print(course)
+# result = cleaner.cleaner(24)
+# for page in result:
+#     for course in page:
+#         print(course)

@@ -1,5 +1,7 @@
 import threading
 import time
+
+import selenium.webdriver.common.keys
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
@@ -11,7 +13,7 @@ info = {
     'username': private.username,
     'password': private.password,
     'term': 'Spring 2022 Wenzhou',
-    'page#': 39,
+    'page#': 24,
 }
 pages = [False for j in range(info['page#'])]
 
@@ -46,24 +48,32 @@ def login(browser: webdriver.Chrome):
 
 
 def enter_course_page(browser: webdriver.Chrome):
-    search_page = browser.find_element(by='xpath',
-                                       value="//span[contains(text(),'Search for Course Sections')]")
-    search_page.click()
-    time.sleep(2)
+    browser.get('https://selfservice.kean.edu/Student/Student/Courses#tab2-content')
+
+    time.sleep(3)
+
+    toggle_tab = browser.find_element(by='xpath', value='//*[@id="main-content"]/div[2]/div/ul/li[2]/a')
+    toggle_tab.click()
+
+    section_listed = browser.find_element(by='xpath',
+                                          value='//*[@id="course-catalog-result-view-type-section-label"]')
+    section_listed.click()
+    time.sleep(3)
+
     term_selector = Select(browser.find_element(by='xpath',
-                                                value="//select[@id='VAR1']"))
+                                                value='//*[@id="term-id"]'))
     term_selector.select_by_visible_text(info['term'])
 
     weekday_selector_1 = browser.find_element(by='xpath',
-                                              value="//label[@id='LABELID_VAR10']")
+                                              value='//*[@id="Monday-label"]')
     weekday_selector_2 = browser.find_element(by='xpath',
-                                              value="//label[@id='LABELID_VAR11']")
+                                              value='//*[@id="Tuesday-label"]')
     weekday_selector_3 = browser.find_element(by='xpath',
-                                              value="//label[@id='LABELID_VAR12']")
+                                              value='//*[@id="Wednesday-label"]')
     weekday_selector_4 = browser.find_element(by='xpath',
-                                              value="//label[@id='LABELID_VAR13']")
+                                              value='//*[@id="Thursday-label"]')
     weekday_selector_5 = browser.find_element(by='xpath',
-                                              value="//label[@id='LABELID_VAR14']")
+                                              value='//*[@id="Friday-label"]')
 
     weekday_selector_1.click()
     weekday_selector_2.click()
@@ -72,23 +82,32 @@ def enter_course_page(browser: webdriver.Chrome):
     weekday_selector_5.click()
 
     submit = browser.find_element(by='xpath',
-                                  value="//body/div[@id='webPage']/div[@id='pageBody']/div[@id='bodyForm']/div[4]/form[1]/div[1]/input[1]")
+                                  value='//*[@id="submit-search-form"]')
+    time.sleep(1)
     submit.click()
 
 
 def save_page_source(browser: webdriver.Chrome, page_number):
-    time.sleep(3)  # this loading is so long.
-    jump_input = browser.find_element(by='xpath',
-                                      value='/html/body/div/div[2]/div[4]/div[4]/form/table/tbody/tr/td/div/table/tbody/tr[2]/td/div/table[1]/tbody/tr/td[1]/input[5]')
-    jump_input.send_keys(page_number)
-    jump_btn = browser.find_element(by='xpath',
-                                    value='/html/body/div/div[2]/div[4]/div[4]/form/table/tbody/tr/td/div/table/tbody/tr[2]/td/div/table[1]/tbody/tr/td[1]/input[6]')
-    jump_btn.click()
+    time.sleep(3)
+    # 下滑到直到到达跳转框
 
-    time.sleep(2)
+    jump_input = browser.find_element(by='xpath',
+                                      value='//*[@id="course-results-current-page"]')
+    browser.execute_script('arguments[0].scrollIntoView();', jump_input)
+
+    # 如果当前不在需要保存的页面上，则跳转。
+    current_page_number = jump_input.get_attribute('value')
+    if current_page_number != page_number:
+        jump_input.clear()
+        jump_input.send_keys(page_number)
+        # 回车跳转
+        jump_input.send_keys(selenium.webdriver.common.keys.Keys.ENTER)
+
+        time.sleep(4)
+
+    # 把网页源代码保存下来
     current_html = browser.page_source.encode('utf-8').decode()
-    # print(current_html)
-    course_page = open('pages/{}.html'.format(page_number), mode='w+', encoding='utf-8')
+    course_page = open('pages/{}.html'.format(current_page_number), mode='w+', encoding='utf-8')
     course_page.write(current_html)
 
 

@@ -1,10 +1,10 @@
-username = 'EXAMPLE'
-password = 'PASSWORD'
+username = 'user'
+password = 'password'
 db = {
     'host': 'ip.ip.ip.ip',
     'port': 3306,
-    'db': 'db_example',
-    'table': 'table_example',
-    'usr': 'db_usr',
-    'pwd': 'db_pwd',
+    'db': 'dbname',
+    'table': 'tablename',
+    'usr': 'username',
+    'pwd': 'password',
 }
