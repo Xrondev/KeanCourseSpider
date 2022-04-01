@@ -6,7 +6,7 @@
 
 提供了两种实现思路：selenium模拟用户点击以及requests向服务器发送请求。
 
-#### 从selenium开始：
+#### 从selenium开始【废弃，暂留备用】：
 
 安装下列依赖：
 
@@ -38,7 +38,7 @@ __注意： 你需要一个和你chrome版本相对应的webdriver，放置在`.
 
 ## 问题
 
-#### selenium实现:
+#### selenium实现【废弃，暂留备用】:
 
 selenuim方式无法获取课程部分信息，comments部分的信息由js加载，需要点击后才会展示，如果每一个页面都要点击30次获取的话时间会非常长（点击没有做）。
 
@@ -54,7 +54,9 @@ selenuim方式无法获取课程部分信息，comments部分的信息由js加�
 
 已经模拟了对应的`header` `request_verification_toekn` `payload` 但是网页返回值为`An error occured when processing your request`
 
-- [ ] __无法正确获取返回值__
+- [x] __无法正确获取返回值__
+
+- [ ] 处理返回值，筛选信息
 
 - [ ] 未实现上传数据库部分 
 
@@ -64,10 +66,10 @@ selenuim方式无法获取课程部分信息，comments部分的信息由js加�
 
 这个POST请求在正常浏览器访问流程中是被一个js发起的。
 
-##### 可能存在的问题是：
+##### 可能存在的问题是：~~
 
-- [ ] 没有正确完成SSL验证(HTTPS。 目前的爬虫关闭了验证，每次发送请求会有警告)
+- [ ] ~~没有正确完成SSL验证(HTTPS。 目前的爬虫关闭了验证，每次发送请求会有警告)~~
 
-- [ ] header内配置错误（可能与`request_verification_toekn`有关）
+- [x] header内配置错误（可能与`request_verification_toekn`有关）
 
-- [ ] 被反爬虫识别（某些参数未配置？）
+- [ ] ~~被反爬虫识别（某些参数未配置？）~~
