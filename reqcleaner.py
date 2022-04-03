@@ -11,7 +11,7 @@ for page in range(1, max_page_num + 1):
     # 有些课程可能有不止一种教学方式，对应了不止一套上课时间，例如物化生以及建筑系的STU工作室时段
     # 返回一个dict包含该课程的上课时段， 在该字典中，days和time都是列表，对应index上的数据表明对应工作日的上课时段
     # !!!注意： 建筑系的STU无法通过课程的Days，StartTime等字段获取，建筑系的课程会出现days中有一个空子列表，time中有一个[None, None]的子列表
-    # todo: 解决建筑系课程工作室时段无法正常显示的问题。
+    # 建筑系课程工作室时段无法正常显示。建筑系课程特殊，暂不考虑。
     def get_meeting_info(course_info: dict) -> dict:
         days = []
         time = []
