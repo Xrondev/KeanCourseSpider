@@ -1,31 +1,19 @@
 # KeanCourseSpider
 [简体中文](README.md) | [English](README-EN.md)  
-一个从肯恩大学自助网站检索**所有**课程信息的脚本。
-可以检索肯恩大学和温州肯恩大学的全部课程。  
-此脚本是为学习目的而开发的。**不鼓励任何方式的滥用**
-
-## 快速开始
-这个脚本使用了requests和tqdm。首先你应该激活一个python环境（或使用全局环境），随后运行：
+A script to retrieve all the course information from self-service website of Kean University.
+Working for both Kean University and Wenzhou-Kean University.  
+This script was developed for Learning purpose. **No abuse is encouraged.**  
+You may find some error prompt write in Chinese.
+## Quick Start 
+This script only used requests and tqdm. Activate a python environment, and then run:
 ```shell
 pip install -r requirements.txt
 ```
-
-对于国内用户，你可能需要：
+Then you can start to use the script by running:
 ```shell
-pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+python main.py main.py [-h] [-y Y] [-t {SPWZ,FAWZ,WBWZ,SP,FA,WB}] [-out {cli,script,csv}] [-proxy PROXY]
 ```
-
-随后你可以开始使用这个脚本：
-```shell
-python main.py [-h] [-y Y] [-t {SPWZ,FAWZ,WBWZ,SP,FA,WB}] [-out {cli,script,csv}] [-proxy PROXY]
-```
-例如，爬取23年温州春季课程输出到csv
-```shell
-python main.py -y 23 -t SPWZ -out csv
-```
-
-## 参数介绍
-
+## Arguments
 > optional arguments:  
   -h, --help            show this help message and exit  
   -y Y                  [2 digits or 4 digits] The term year you need, notice that usually the COMING semester and the Ended semesterare stored in the self service. For example, it is 23 Winter, only 22 summer and 23spring can be visited on the website  
@@ -35,20 +23,19 @@ python main.py -y 23 -t SPWZ -out csv
                         output type, every choice will generate json file in info/ . "script" invoking custom script in custom_action.py with retrieved data  
   -proxy PROXY          proxy settings, ignore if you can connect to self services smoothly
 
-
--h: 显示帮助  
--y: 学年，2位或4位数字，例如23 （2023学年）  
--t: 学期，带WZ结尾的是温州肯恩大学，否则是美肯。SP为春季，FA为秋季，WB为冬季  
--out：指定输出的方式，默认打印到命令行  
--proxy: 启用代理，不填默认不启用，若本机已经打开代理软件请走代理  
-
-## 输出到数据库 （自定义输出）
-**您必须修改custom_action.py中的内容以满足您的要求**  
-当`-out`参数定义为`custom`时，主程序将调用custom_action.py中的main方法。你可以在这里定义你的数据处理方式，例如统计，上传到数据库或筛选。
+  
+-h: Displays help  
+-y: School year, two or four digits, such as 23 (school year 2023)  
+-t: The semester ending with WZ is Wenzhou-Kean University, otherwise it is Kean. SP for spring, FA for autumn, WB for winter  
+-out: specifies the output mode. By default, it is printed to the command line  
+-proxy: Enables proxy. If no parameter is specified, this parameter is disabled by default. If the proxy software is enabled on the local device, use the proxy
+## Custom output (Output to a database)
+**YOU MUST modify the content in custom_action.py to meet your requirement**  
+When the '-out' argument is defined to `custom`, the main program calls the main method in custom_action.py. Here you can define your data processing methods, such as statistics, uploading to a database or filtering.
 ```shell
 python main.py -y 23 -t SPWZ -out custom
 ```
-custom_action.py:
+custom_action.py example:
 ```python
 import pymysql
 
@@ -68,4 +55,3 @@ class custom:
     def end(self):
         self.cursor.close()
 ```
-
