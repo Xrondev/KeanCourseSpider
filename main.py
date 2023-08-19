@@ -63,6 +63,10 @@ def main(year: int, semester: str, proxy: str) -> None:
     term = f'{year}/{semester}'
     print('目标学期代码：', term)
 
+    # 新建info文件夹
+    if not os.path.exists('info'):
+        os.mkdir('info')
+
     proxies = {
         'https': ''
     }
